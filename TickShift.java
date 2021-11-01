@@ -9,7 +9,7 @@ import vevo.codex.codexhack.util.EntityUtil;
 
 /*
 * Credits
-* - Codex: [rudimentary shit code]
+* - Codex#4562: [rudimentary shit code]
 * - Doogie13: [explaining codex tickshift]
 * - noat (me): [fix codex's code to make it works]
 */
