@@ -1,7 +1,6 @@
 package vevo.codex.codexhack.features.modules.player;
 
 import net.minecraft.network.play.client.CPacketPlayer;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import vevo.codex.codexhack.event.events.PacketEvent;
 import vevo.codex.codexhack.features.modules.Module;
 import vevo.codex.codexhack.features.setting.Setting;
@@ -36,13 +35,6 @@ public class TickShift extends Module {
         }
         if (!EntityUtil.isEntityMoving(mc.player)) tick++;
         if (tick >= ticksVal.getValue()) tick = ticksVal.getValue();
-    }
-
-    public void onPacketSend(PacketEvent.Send event) {
-        if (event.getPacket() instanceof CPacketPlayer) {
-            tick--;
-            if (tick<=0) {tick=0;}
-        }
     }
 
     @Override
