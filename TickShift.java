@@ -1,47 +1,40 @@
-package vevo.codex.codexhack.features.modules.player;
+package com.gamesense.client.module.modules.exploits;
 
-import net.minecraft.network.play.client.CPacketPlayer;
-import vevo.codex.codexhack.event.events.PacketEvent;
-import vevo.codex.codexhack.features.modules.Module;
-import vevo.codex.codexhack.features.setting.Setting;
-import vevo.codex.codexhack.util.EntityUtil;
+import com.gamesense.api.setting.values.DoubleSetting;
+import com.gamesense.api.setting.values.IntegerSetting;
+import com.gamesense.client.module.Category;
+import com.gamesense.client.module.Module;
 
 /*
-* Credits
-* - Codex#4562: [rudimentary shit code]
-* - Doogie13: [explaining codex tickshift]
-* - noat (me): [fix codex's code to make it works]
+* @author hausemasterissue
+* @since 1/11/2021
 */
+
+@Module.Declaration(name = "TickShift", category = Category.Exploits)
 public class TickShift extends Module {
-    public TickShift() {
-        super("TickShift", "funny exploit on top", Category.PLAYER, true, false, false);
-    }
-    Setting<Integer> ticksVal = this.register(new Setting<>("Ticks",18,1,100));
-    Setting<Float> timer = this.register(new Setting<>("Timer",1.8f,1f,3f));
-
+	
+    IntegerSetting disableTicks = registerInteger("DisableTicks", 10, 1, 100);
+    DoubleSetting multiplier = registerDouble("Multiplier", 3.0, 1.0, 10.0);
+	
+    private int ticksPassed = 0;
+	
     public void onEnable() {
-        canTimer = false;
-        tick = 0;
+	   mc.timer.tickLength = ((float)(50.0 / multiplier.getValue()));
     }
-
-    boolean canTimer = false;
-    int tick = 0;
-
+	
     public void onUpdate() {
-        if (tick <= 0)  {tick = 0; canTimer = false; mc.timer.tickLength = 50f;}
-        if (tick > 0 && EntityUtil.isEntityMoving(mc.player)) {
-            tick--;
-            mc.timer.tickLength = 50f / timer.getValue();
-        }
-        if (!EntityUtil.isEntityMoving(mc.player)) tick++;
-        if (tick >= ticksVal.getValue()) tick = ticksVal.getValue();
+	    ticksPassed++;
+	   
+	    if(ticksPassed >= disableTicks.getValue()) {
+		    ticksPassed = 0;
+		    disable();	
+	    }
     }
-
-    @Override
-    public String getDisplayInfo() {
-        return String.valueOf(tick);
-    }
+	
     public void onDisable() {
-        mc.timer.tickLength = 50f;
+	    mc.timer.tickLength = 50f;    
     }
+  
+
+
 }
